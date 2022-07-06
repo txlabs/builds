@@ -1,0 +1,123 @@
+on:
+  release:
+    types: [created]
+
+name: Release
+
+jobs:
+  blockless_networking_release:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: txlabs/blockless-networking
+          token: ${{ secrets.gh_pat }}
+      - uses: actions/setup-go@v3
+        with:
+          go-version: "1.17"
+          check-latest: true
+      - run: make
+      - name: Archive Release
+        uses: thedoctor0/zip-release@main
+        with:
+          type: "tar"
+          directory: build/
+          filename: ../blockless-txkeygen-darwin.x64.tar.gz
+          path: txkeygen-darwin-x64
+      - name: Archive Release
+        uses: thedoctor0/zip-release@main
+        with:
+          type: "tar"
+          directory: build/
+          filename: ../blockless-txnode-darwin.x64.tar.gz
+          path: txnode-darwin-x64
+      - name: Archive Release
+        uses: thedoctor0/zip-release@main
+        with:
+          type: "tar"
+          directory: build/
+          filename: ../blockless-txkeygen-windows.x64.tar.gz
+          path: txkeygen-windows-x64.exe
+      - name: Archive Release
+        uses: thedoctor0/zip-release@main
+        with:
+          type: "tar"
+          directory: build/
+          filename: ../blockless-txnode-windows.x64.tar.gz
+          path: txnode-windows-x64.exe
+      - name: Archive Release
+        uses: thedoctor0/zip-release@main
+        with:
+          type: "tar"
+          directory: build/
+          filename: ../blockless-txkeygen-linux.x64.tar.gz
+          path: txkeygen-linux-x64
+      - name: Archive Release
+        uses: thedoctor0/zip-release@main
+        with:
+          type: "tar"
+          filename: ../blockless-txnode-linux.x64.tar.gz
+          directory: build/
+          path: txnode-linux-x64
+      - name: Get release
+        id: get_release
+        uses: bruceadams/get-release@v1.2.3
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: blockless-txnode-linux.x64.tar.gz
+          asset_name: blockless-txnode-linux.x64.tar.gz
+          asset_content_type: application/gzip
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: blockless-txnode-windows.x64.tar.gz
+          asset_name: blockless-txnode-windows.x64.tar.gz
+          asset_content_type: application/gzip
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: blockless-txnode-darwin.x64.tar.gz
+          asset_name: blockless-txnode-darwin.x64.tar.gz
+          asset_content_type: application/gzip
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: blockless-txkeygen-linux.x64.tar.gz
+          asset_name: blockless-txkeygen-linux.x64.tar.gz
+          asset_content_type: application/gzip
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: blockless-txkeygen-windows.x64.tar.gz
+          asset_name: blockless-txkeygen-windows.x64.tar.gz
+          asset_content_type: application/gzip
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: blockless-txkeygen-darwin.x64.tar.gz
+          asset_name: blockless-txkeygen-darwin.x64.tar.gz
+          asset_content_type: application/gzip
