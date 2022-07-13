@@ -102,6 +102,20 @@ jobs:
         with:
           type: "tar"
           directory: build/
+          filename: ../blockless-txkeygen-darwin.arm64.tar.gz
+          path: txkeygen-darwin-arm64
+      - name: Archive Release
+        uses: thedoctor0/zip-release@main
+        with:
+          type: "tar"
+          directory: build/
+          filename: ../blockless-txnode-darwin.arm64.tar.gz
+          path: txnode-darwin-arm64
+      - name: Archive Release
+        uses: thedoctor0/zip-release@main
+        with:
+          type: "tar"
+          directory: build/
           filename: ../blockless-txkeygen-windows.x64.tar.gz
           path: txkeygen-windows-x64.exe
       - name: Archive Release
@@ -163,6 +177,15 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: blockless-txnode-darwin.arm64.tar.gz
+          asset_name: blockless-txnode-darwin.arm64.tar.gz
+          asset_content_type: application/gzip
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
           asset_path: blockless-txkeygen-linux.x64.tar.gz
           asset_name: blockless-txkeygen-linux.x64.tar.gz
           asset_content_type: application/gzip
@@ -183,4 +206,13 @@ jobs:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
           asset_path: blockless-txkeygen-darwin.x64.tar.gz
           asset_name: blockless-txkeygen-darwin.x64.tar.gz
+          asset_content_type: application/gzip
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: blockless-txkeygen-darwin.arm64.tar.gz
+          asset_name: blockless-txkeygen-darwin.arm64.tar.gz
           asset_content_type: application/gzip
