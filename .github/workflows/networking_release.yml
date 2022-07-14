@@ -60,8 +60,8 @@ jobs:
       - name: Archive Release
         uses: thedoctor0/zip-release@main
         with:
-          type: "zip"
-          filename: ../../blockless-runtime.${{ matrix.os }}.${{ matrix.arch }}.zip
+          type: "tar"
+          filename: ../../blockless-runtime.${{ matrix.os }}.${{ matrix.arch }}.tar.gz
           directory: target/release
           path: .
       - name: Get release
@@ -75,8 +75,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: blockless-runtime.${{ matrix.os }}.${{ matrix.arch }}.zip
-          asset_name: blockless-runtime.${{ matrix.os }}.${{ matrix.arch }}.zip
+          asset_path: blockless-runtime.${{ matrix.os }}.${{ matrix.arch }}.tar.gz
+          asset_name: blockless-runtime.${{ matrix.os }}.${{ matrix.arch }}.tar.gz
           asset_content_type: application/gzip
 
   blockless_networking_release:
