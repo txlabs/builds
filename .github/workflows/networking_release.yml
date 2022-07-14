@@ -9,8 +9,18 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+        arch: [x86_64, aarch64]
     runs-on: ${{ matrix.os }}
     steps:
+      - id: set env
+        if: ${{ matrix.os }} == ubuntu-latest
+        run: echo "CROSS_PLAT=unknown-linux-gnu"
+      - id: set env
+        if: ${{ matrix.os }} == windows-latest
+        run: echo "CROSS_PLAT=pc-windows-msvc"
+      - id: set env
+        if: ${{ matrix.os }} == macos-latest
+        run: echo "CROSS_PLAT=apple-darwin"
       - uses: actions/checkout@v2
         with:
           repository: txlabs/blockless-runtime-environment
@@ -21,6 +31,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: build
+          target: ${{ matrix.os }}-${{ env.CROSS_PLAT }}
           args: --release --all-features
       - name: Remove File
         uses: JesseTG/rm@v1.0.3
@@ -50,7 +61,7 @@ jobs:
         uses: thedoctor0/zip-release@main
         with:
           type: "zip"
-          filename: ../../blockless-runtime.${{ matrix.os }}.x64.zip
+          filename: ../../blockless-runtime.${{ matrix.os }}.${{ matrix.os }}.zip
           directory: target/release
           path: .
       - name: Get release
@@ -64,8 +75,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: blockless-runtime.${{ matrix.os }}.x64.zip
-          asset_name: blockless-runtime.${{ matrix.os }}.x64.zip
+          asset_path: blockless-runtime.${{ matrix.os }}.${{ matrix.os }}.zip
+          asset_name: blockless-runtime.${{ matrix.os }}.${{ matrix.os }}.zip
           asset_content_type: application/gzip
 
   blockless_networking_release:
