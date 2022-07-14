@@ -8,19 +8,10 @@ jobs:
   blockless_runtime:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
         arch: [x86_64, aarch64]
-    runs-on: ${{ matrix.os }}
+        target: [unknown-linux-gnu, pc-windows-msvc, apple-darwin]
+    runs-on: ubuntu-latest
     steps:
-      - name: set_env
-        if: ${{ matrix.os }} == ubuntu-latest
-        run: echo "CROSS_PLAT=unknown-linux-gnu"
-      - name: set_env
-        if: ${{ matrix.os }} == windows-latest
-        run: echo "CROSS_PLAT=pc-windows-msvc"
-      - name: set_env
-        if: ${{ matrix.os }} == macos-latest
-        run: echo "CROSS_PLAT=apple-darwin"
       - uses: actions/checkout@v2
         with:
           repository: txlabs/blockless-runtime-environment
@@ -28,13 +19,13 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-          target: ${{ matrix.arch }}-${{ env.CROSS_PLAT }}
+          target: ${{ matrix.arch }}-${{ matrix.target }}
           override: true
       - uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: build
-          args: --target ${{ matrix.arch }}-${{ env.CROSS_PLAT }}
+          args: --target ${{ matrix.arch }}-${{ matrix.target }}
       - name: Remove File
         uses: JesseTG/rm@v1.0.3
         with:
@@ -63,7 +54,7 @@ jobs:
         uses: thedoctor0/zip-release@main
         with:
           type: "tar"
-          filename: ../../blockless-runtime.${{ matrix.os }}.${{ matrix.arch }}.tar.gz
+          filename: ../../blockless-runtime.${{ matrix.target }}.${{ matrix.arch }}.tar.gz
           directory: target/release
           path: .
       - name: Get release
@@ -77,8 +68,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: blockless-runtime.${{ matrix.os }}.${{ matrix.arch }}.tar.gz
-          asset_name: blockless-runtime.${{ matrix.os }}.${{ matrix.arch }}.tar.gz
+          asset_path: blockless-runtime.${{ matrix.target }}.${{ matrix.arch }}.tar.gz
+          asset_name: blockless-runtime.${{ matrix.target }}.${{ matrix.arch }}.tar.gz
           asset_content_type: application/gzip
 
   blockless_networking_release:
