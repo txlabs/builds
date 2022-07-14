@@ -23,7 +23,6 @@ jobs:
           override: true
       - uses: actions-rs/cargo@v1
         with:
-          use-cross: true
           command: build
           args: --target ${{ matrix.arch }}-${{ matrix.target }}
       - name: Remove File
