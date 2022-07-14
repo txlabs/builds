@@ -86,6 +86,10 @@ jobs:
         goarch: [amd64, arm64]
     runs-on: ubuntu-latest
     steps:
+      - name: set goos
+        run: echo "GOOS=${{ matrix.goos }}"
+      - name: set goarch
+        run: echo "GOARCH=${{ matrix.goarch }}"
       - uses: actions/checkout@v2
         with:
           repository: txlabs/blockless-networking
@@ -101,14 +105,14 @@ jobs:
           type: "tar"
           directory: build/
           filename: ../blockless-txkeygen-${{ matrix.goos }}.${{ matrix.goarch }}.tar.gz
-          path: txkeygen-${{ matrix.goos }}.${{ matrix.goarch }}*
+          path: txkeygen*
       - name: Archive Release
         uses: thedoctor0/zip-release@main
         with:
           type: "tar"
           directory: build/
           filename: ../blockless-txnode-${{ matrix.goos }}.${{ matrix.goarch }}.tar.gz
-          path: txnode-${{ matrix.goos }}.${{ matrix.goarch }}*
+          path: txnode*
       - name: Get release
         id: get_release
         uses: bruceadams/get-release@v1.2.3
