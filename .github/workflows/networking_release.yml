@@ -82,8 +82,9 @@ jobs:
   blockless_networking_release:
     strategy:
       matrix:
-        os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+        goos: [darwin, linux, windows]
+        goarch: [amd64, arm64]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
@@ -99,57 +100,15 @@ jobs:
         with:
           type: "tar"
           directory: build/
-          filename: ../blockless-txkeygen-darwin.x64.tar.gz
-          path: txkeygen-darwin-x64
+          filename: ../blockless-txkeygen-${{ matrix.goos }}.${{ matrix.goarch }}.tar.gz
+          path: txkeygen-${{ matrix.goos }}.${{ matrix.goarch }}*
       - name: Archive Release
         uses: thedoctor0/zip-release@main
         with:
           type: "tar"
           directory: build/
-          filename: ../blockless-txnode-darwin.x64.tar.gz
-          path: txnode-darwin-x64
-      - name: Archive Release
-        uses: thedoctor0/zip-release@main
-        with:
-          type: "tar"
-          directory: build/
-          filename: ../blockless-txkeygen-darwin.arm64.tar.gz
-          path: txkeygen-darwin-arm64
-      - name: Archive Release
-        uses: thedoctor0/zip-release@main
-        with:
-          type: "tar"
-          directory: build/
-          filename: ../blockless-txnode-darwin.arm64.tar.gz
-          path: txnode-darwin-arm64
-      - name: Archive Release
-        uses: thedoctor0/zip-release@main
-        with:
-          type: "tar"
-          directory: build/
-          filename: ../blockless-txkeygen-windows.x64.tar.gz
-          path: txkeygen-windows-x64.exe
-      - name: Archive Release
-        uses: thedoctor0/zip-release@main
-        with:
-          type: "tar"
-          directory: build/
-          filename: ../blockless-txnode-windows.x64.tar.gz
-          path: txnode-windows-x64.exe
-      - name: Archive Release
-        uses: thedoctor0/zip-release@main
-        with:
-          type: "tar"
-          directory: build/
-          filename: ../blockless-txkeygen-linux.x64.tar.gz
-          path: txkeygen-linux-x64
-      - name: Archive Release
-        uses: thedoctor0/zip-release@main
-        with:
-          type: "tar"
-          filename: ../blockless-txnode-linux.x64.tar.gz
-          directory: build/
-          path: txnode-linux-x64
+          filename: ../blockless-txnode-${{ matrix.goos }}.${{ matrix.goarch }}.tar.gz
+          path: txnode-${{ matrix.goos }}.${{ matrix.goarch }}*
       - name: Get release
         id: get_release
         uses: bruceadams/get-release@v1.2.3
@@ -161,8 +120,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: blockless-txnode-linux.x64.tar.gz
-          asset_name: blockless-txnode-linux.x64.tar.gz
+          asset_path: blockless-txnode-${{ matrix.goos }}.${{ matrix.goarch }}.tar.gz
+          asset_name: blockless-txnode-${{ matrix.goos }}.${{ matrix.goarch }}.tar.gz
           asset_content_type: application/gzip
       - name: upload artifact
         uses: actions/upload-release-asset@v1
@@ -170,60 +129,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: blockless-txnode-windows.x64.tar.gz
-          asset_name: blockless-txnode-windows.x64.tar.gz
-          asset_content_type: application/gzip
-      - name: upload artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: blockless-txnode-darwin.x64.tar.gz
-          asset_name: blockless-txnode-darwin.x64.tar.gz
-          asset_content_type: application/gzip
-      - name: upload artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: blockless-txnode-darwin.arm64.tar.gz
-          asset_name: blockless-txnode-darwin.arm64.tar.gz
-          asset_content_type: application/gzip
-      - name: upload artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: blockless-txkeygen-linux.x64.tar.gz
-          asset_name: blockless-txkeygen-linux.x64.tar.gz
-          asset_content_type: application/gzip
-      - name: upload artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: blockless-txkeygen-windows.x64.tar.gz
-          asset_name: blockless-txkeygen-windows.x64.tar.gz
-          asset_content_type: application/gzip
-      - name: upload artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: blockless-txkeygen-darwin.x64.tar.gz
-          asset_name: blockless-txkeygen-darwin.x64.tar.gz
-          asset_content_type: application/gzip
-      - name: upload artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: blockless-txkeygen-darwin.arm64.tar.gz
-          asset_name: blockless-txkeygen-darwin.arm64.tar.gz
+          asset_path: blockless-txkeygen-${{ matrix.goos }}.${{ matrix.goarch }}.tar.gz
+          asset_name: blockless-txkeygen-${{ matrix.goos }}.${{ matrix.goarch }}.tar.gz
           asset_content_type: application/gzip
