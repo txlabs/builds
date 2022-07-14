@@ -12,13 +12,13 @@ jobs:
         arch: [x86_64, aarch64]
     runs-on: ${{ matrix.os }}
     steps:
-      - id: set env
+      - name: set_env
         if: ${{ matrix.os }} == ubuntu-latest
         run: echo "CROSS_PLAT=unknown-linux-gnu"
-      - id: set env
+      - name: set_env
         if: ${{ matrix.os }} == windows-latest
         run: echo "CROSS_PLAT=pc-windows-msvc"
-      - id: set env
+      - name: set_env
         if: ${{ matrix.os }} == macos-latest
         run: echo "CROSS_PLAT=apple-darwin"
       - uses: actions/checkout@v2
