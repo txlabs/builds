@@ -8,16 +8,9 @@ jobs:
   blockless_runtime:
     strategy:
       matrix:
-        target:
-          [
-            aarch64-apple-darwin,
-            x86_64-unknown-linux-gnu,
-            aarch64-unknown-linux-gnu,
-            x86_64-apple-darwin,
-            x86_64-pc-windows-gnu,
-            aarch64-pc-windows-gnu,
-          ]
-    runs-on: ubuntu-latest
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        arch: [x86_64]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -26,14 +19,10 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-          profile: minimal
-          override: true
-          target: ${{ matrix.target }}
       - uses: actions-rs/cargo@v1
         with:
-          use-cross: true
           command: build
-          args: --release --target ${{ matrix.target }}
+          args: --release --all-features
       - name: Remove File
         uses: JesseTG/rm@v1.0.3
         with:
@@ -62,7 +51,7 @@ jobs:
         uses: thedoctor0/zip-release@main
         with:
           type: "tar"
-          filename: ../../blockless-runtime.${{ matrix.target }}.tar.gz
+          filename: ../../blockless-runtime.${{ matrix.os }}.${{ matrix.arch }}.tar.gz
           directory: target/release
           path: .
       - name: Get release
@@ -76,8 +65,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: blockless-runtime.${{ matrix.target }}.tar.gz
-          asset_name: blockless-runtime.${{ matrix.target }}.tar.gz
+          asset_path: blockless-runtime.${{ matrix.os }}.${{ matrix.arch }}.tar.gz
+          asset_name: blockless-runtime.${{ matrix.os }}.${{ matrix.arch }}.tar.gz
           asset_content_type: application/gzip
 
   blockless_networking_release:
