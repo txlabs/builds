@@ -31,7 +31,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: install apt
-        if: contains({{ matrix.target }}, aarch64-unknown-linux)
+        if: contains(${{ matrix.target }}, aarch64-unknown-linux)
         run: sudo apt-get update && sudo apt-get install -y aarch64-linux-gnu-gcc
       - uses: actions/checkout@v2
         with:
