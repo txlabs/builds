@@ -41,6 +41,8 @@ jobs:
           token: ${{ secrets.gh_pat }}
       - name: Install Rust
         run: rustup install ${{ matrix.rust }}
+      - name: Install Rust
+        run: rustup target add ${{ matrix.target }}
       - name: Build
         run: cargo build --release --target ${{ matrix.target }}
       - name: Remove File
