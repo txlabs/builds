@@ -81,7 +81,7 @@ jobs:
         with:
           type: "tar"
           filename: ../../blockless-runtime.${{ matrix.os }}.${{ matrix.arch }}.tar.gz
-          directory: target/release
+          directory: target/${{ matrix.target }}
           path: .
       - name: Get release
         id: get_release
