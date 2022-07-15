@@ -19,7 +19,7 @@ jobs:
           #   target: aarch64-apple-darwin
           #   arch: aarch64
           - build: linux
-            os: macos-latest
+            os: ubuntu-latest
             rust: stable
             target: x86_64-unknown-linux-gnu
             arch: x86_64
