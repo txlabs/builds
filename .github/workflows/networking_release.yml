@@ -51,6 +51,7 @@ jobs:
       - run: cargo build  --release --all-features --target ${{ matrix.target }}
         env:
           TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: gcc-10-aarch64-linux-gnu
+      - run: ls -a target/release
       - name: Remove File
         uses: JesseTG/rm@v1.0.3
         with:
