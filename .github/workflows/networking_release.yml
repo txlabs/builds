@@ -51,37 +51,36 @@ jobs:
       - run: cargo build  --release --all-features --target ${{ matrix.target }}
         env:
           TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: gcc-10-aarch64-linux-gnu
-      - run: ls -a target/
       - name: Remove File
         uses: JesseTG/rm@v1.0.3
         with:
-          path: target/release/.fingerprint
+          path: target/${{ matrix.target }}/release/.fingerprint
       - name: Remove File
         uses: JesseTG/rm@v1.0.3
         with:
-          path: target/release/examples
+          path: target/${{ matrix.target }}/release/examples
       - name: Remove File
         uses: JesseTG/rm@v1.0.3
         with:
-          path: target/release/build
+          path: ttarget/${{ matrix.target }}/release/build
       - name: Remove File
         uses: JesseTG/rm@v1.0.3
         with:
-          path: target/release/incremental
+          path: target/${{ matrix.target }}/release/incremental
       - name: Remove File
         uses: JesseTG/rm@v1.0.3
         with:
-          path: target/release/examples
+          path: target/${{ matrix.target }}/release/examples
       - name: Remove File
         uses: JesseTG/rm@v1.0.3
         with:
-          path: target/release/deps
+          path: target/${{ matrix.target }}/release/deps
       - name: Archive Release
         uses: thedoctor0/zip-release@main
         with:
           type: "tar"
-          filename: ../../blockless-runtime.${{ matrix.os }}.${{ matrix.arch }}.tar.gz
-          directory: target/${{ matrix.target }}
+          filename: ../../../blockless-runtime.${{ matrix.os }}.${{ matrix.arch }}.tar.gz
+          directory: target/${{ matrix.target }}/release
           path: .
       - name: Get release
         id: get_release
