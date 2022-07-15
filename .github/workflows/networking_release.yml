@@ -8,20 +8,41 @@ jobs:
   blockless_runtime:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - build: linux-x64
+            os: ubuntu-latest
+            rust: stable
+            target: x86_64-unknown-linux-gnu
+          - build: linux-aarch64
+            os: ubuntu-latest
+            rust: stable
+            target: aarch64-unknown-linux-gnu
+          - build: macos
+            os: macos-latest
+            rust: stable
+            target: x86_64-apple-darwin
+          - build: macos-aarch64
+            os: macos-latest
+            rust: stable
+            target: aarch64-apple-darwin
+          - build: windows
+            os: windows-latest
+            rust: stable
+            target: x86_64-pc-windows-msvc
+          - build: windows
+            os: windows-latest
+            rust: stable
+            target: aarch64-pc-windows-msvc
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
         with:
           repository: txlabs/blockless-runtime-environment
           token: ${{ secrets.gh_pat }}
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release --all-features
+      - name: Install Rust
+        run: rustup install ${{ matrix.rust }}
+      - name: Build
+        run: cargo build --release --target ${{ matrix.target }}
       - name: Remove File
         uses: JesseTG/rm@v1.0.3
         with:
@@ -49,8 +70,8 @@ jobs:
       - name: Archive Release
         uses: thedoctor0/zip-release@main
         with:
-          type: "zip"
-          filename: ../../blockless-runtime.${{ matrix.os }}.x64.zip
+          type: "tar"
+          filename: ../../blockless-runtime.${{ matrix.target }}.tar.gz
           directory: target/release
           path: .
       - name: Get release
@@ -64,9 +85,10 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: blockless-runtime.${{ matrix.os }}.x64.zip
-          asset_name: blockless-runtime.${{ matrix.os }}.x64.zip
+          asset_path: blockless-runtime.${{ matrix.target }}.tar.gz
+          asset_name: blockless-runtime.${{ matrix.target }}.tar.gz
           asset_content_type: application/gzip
+
   blockless_networking_release:
     strategy:
       matrix:
