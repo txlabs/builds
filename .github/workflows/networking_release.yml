@@ -23,11 +23,11 @@ jobs:
           #   rust: stable
           #   target: x86_64-unknown-linux-gnu
           #   arch: x86_64
-          - build: linux_arm64
-            os: ubuntu-latest
-            rust: stable
-            target: aarch64-unknown-linux-gnu
-            arch: aarch64
+          # - build: linux_arm64
+          #   os: ubuntu-latest
+          #   rust: stable
+          #   target: aarch64-unknown-linux-gnu
+          #   arch: aarch64
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install
