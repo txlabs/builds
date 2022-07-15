@@ -31,7 +31,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: install apt
-        if: runner.os == 'Linux'
+        if: ${{ matrix.os }} == 'ubuntu-latest'
         run: sudo apt-get update && sudo apt-get install -y gcc g++ git gcc-*-aarch64-linux-gnu g++-*-aarch64-linux-gnu libncurses5-dev
       - uses: actions/checkout@v2
         with:
