@@ -23,10 +23,20 @@ jobs:
           #   rust: stable
           #   target: x86_64-unknown-linux-gnu
           #   arch: x86_64
-          - build: linux_arm64
-            os: ubuntu-latest
+          # - build: linux_arm64
+          #   os: ubuntu-latest
+          #   rust: stable
+          #   target: aarch64-unknown-linux-gnu
+          #   arch: aarch64
+          - build: windows
+            os: windows-latest
             rust: stable
-            target: aarch64-unknown-linux-gnu
+            target: x86_64-pc-windows-msvc
+            arch: x86_64
+          - build: windows
+            os: windows-latest
+            rust: stable
+            target: aarch64-pc-windows-msvc
             arch: aarch64
     runs-on: ${{ matrix.os }}
     steps:
