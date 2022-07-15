@@ -42,7 +42,7 @@ jobs:
           repository: txlabs/blockless-runtime-environment
           token: ${{ secrets.gh_pat }}
       - name: Install Linker
-        if: matrix.cross && contains(matrix.os, "ubuntu-latest")
+        if: matrix.cross && contains(matrix.os, 'ubuntu-latest')
         run: |
           sudo apt update
           sudo apt install ${{ matrix.linker }}
