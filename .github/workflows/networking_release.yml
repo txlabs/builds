@@ -45,9 +45,9 @@ jobs:
           if [ "$RUNNER_OS" == "Linux" ]; then
                 sudo apt-get update && sudo apt-get install -y gcc g++ git gcc-*-aarch64-linux-gnu g++-*-aarch64-linux-gnu libncurses5-dev
           elif [ "$RUNNER_OS" == "Windows" ]; then
-                choco install important_windows_software
+
           elif [ "$RUNNER_OS" == "Darwin" ]; then
-                choco install important_windows_software
+            
           fi
         shell: bash
       - uses: actions/checkout@v2
