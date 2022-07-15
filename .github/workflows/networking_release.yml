@@ -46,14 +46,23 @@ jobs:
         run: |
           sudo apt update
           sudo apt install ${{ matrix.linker }} libssl-dev -y
-      - name: Install Rust
-        run: rustup install ${{ matrix.rust }}
-      - name: Install Rust
-        run: rustup target add ${{ matrix.target }}
-      - name: Build
-        run: cargo build --release --target ${{ matrix.target }}
-        # env:
-        #   PKG_CONFIG_SYSROOT_DIR: /
+      # - name: Install Rust
+      #   run: rustup install ${{ matrix.rust }}
+      # - name: Install Rust
+      #   run: rustup target add ${{ matrix.target }}
+      # - name: Build
+      #   run: cargo build --release --target ${{ matrix.target }}
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --all-features --target  ${{ matrix.target }}
+      # env:
+      #   PKG_CONFIG_SYSROOT_DIR: /
       - name: Remove File
         uses: JesseTG/rm@v1.0.3
         with:
